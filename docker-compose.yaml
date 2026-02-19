@@ -1,0 +1,62 @@
+services:
+  x-datastore-template: &datastore-template
+    restart: unless-stopped
+    networks:
+    - app_datastore
+
+  mysql:
+    <<: *datastore-template
+    container_name: "${APP_NAME:-app}_mysql"
+    image: mysql:8
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  rabbitmq:
+    <<: *datastore-template
+    container_name: "${APP_NAME:-app}_rabbitmq"
+    image: rabbitmq:3.7-management
+    hostname: rabbitmq
+    ports:
+      - "${RABBITMQ_HTTP_PORT}:15672"
+      - "${RABBITMQ_PORT}:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+
+  redis:
+    <<: *datastore-template
+    container_name: "${APP_NAME:-app}_redis"
+    image: redis:7
+    command: redis-server --appendonly yes --bind 0.0.0.0
+    ports:
+      - "${REDIS_PORT}:6379"
+
+  minio:
+    <<: *datastore-template
+    container_name: "${APP_NAME:-app}_minio"
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "${MINIO_API_PORT}:9000"
+      - "${MINIO_CONSOLE_PORT}:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+
+volumes:
+  mysql_data:
+  minio_data:
+
+networks:
+  app_datastore:
+    name: app_datastore
+    driver: bridge

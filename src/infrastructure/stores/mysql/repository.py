@@ -1,0 +1,33 @@
+# coding utf-8
+
+# packages
+
+from typing import Generic
+
+# application dependencies
+
+from ..common import (
+    TTable,
+    BaseSQLRepository,
+)
+
+from .engine import MySQLEngine
+
+from src.domain.protocols.stores import IMySQLProtocol
+
+
+class MySQLRepository(
+    BaseSQLRepository,
+    IMySQLProtocol,
+    Generic[TTable],
+):
+    def __init__(
+        self,
+        *,
+        engine: MySQLEngine,
+        table: type[TTable],
+    ) -> None:
+        super().__init__(
+            engine=engine,
+            table=table,
+        )

@@ -1,0 +1,12 @@
+# Normalize line endings for all text files
+* text=auto eol=lf
+
+# Specify Python source files and their diff driver
+*.py text diff=python
+*.pyi text diff=python
+
+# Mark common Python binary files
+*.pyc binary
+*.pyd binary
+*.pyo binary
+*.pkl binary
