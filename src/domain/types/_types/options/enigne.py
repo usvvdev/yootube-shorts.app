@@ -74,7 +74,7 @@ class DSNOptions(BaseConfigType):
         pwd: str = quote_plus(self.password.get_secret_value()) if self.password else ""
         credentials: str = f"{user}:{pwd}@" if pwd else f"{user}@" if user else ""
 
-        return f"{self.driver}://{credentials}{self.host}:{self.port}"
+        return f"{self.driver}://{credentials}{self.host}:{self.port}/{self.database}"
 
 
 class ConnectionOptions(DSNOptions):

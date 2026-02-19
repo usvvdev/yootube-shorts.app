@@ -18,5 +18,8 @@ class BaseCacheEngine(BaseEngine):
     @cached_property
     def engine(self) -> Redis:
         return from_url(
-            **self.options.dump,
+            **self.options.model_dump(
+                exclude={"driver"},
+                exclude_none=True,
+            ),
         )
