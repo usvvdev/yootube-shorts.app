@@ -1,9 +1,9 @@
-services:
-  x-datastore-template: &datastore-template
-    restart: unless-stopped
-    networks:
+x-datastore-template: &datastore-template
+  restart: unless-stopped
+  networks:
     - app_datastore
 
+services:
   mysql:
     <<: *datastore-template
     container_name: "${APP_NAME:-app}_mysql"
