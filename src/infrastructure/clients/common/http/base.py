@@ -2,29 +2,36 @@
 
 # packages
 
-from typing import Any
+from typing import (
+    Any,
+    Optional,
+)
 
 from httpx import Response
+
+from functools import lru_cache
 
 # application dependencies
 
 from .executor import HTTPExecutor
 
+from src.domain.types.enums.common import ServiceType
+
 from src.domain.types.enums.common import RequestMethod
 
-from src.domain.types._types.options import ServiceOptions
+from src.core.config.base import ApplicationBaseConfig
+
+from src.domain.types._types.options import ServiceURLOptions
 
 
 class BaseHTTPAdapter(HTTPExecutor):
     def __init__(
         self,
         *,
-        service: str,
-        options: ServiceOptions,
+        service: ServiceType,
+        config: ApplicationBaseConfig,
     ) -> None:
-        super().__init__(
-            options=options,
-        )
+        self._config = config
         self._service = service
 
     async def __session_request(
@@ -41,16 +48,25 @@ class BaseHTTPAdapter(HTTPExecutor):
                 **kwargs,
             )
 
+    @property
+    @lru_cache
+    def service_options(
+        self,
+    ) -> ServiceURLOptions:
+        return self._config.service_options.get_options(
+            self._service,
+        )
+
     async def __request(
         self,
         *,
         method: str,
-        base_url: str,
         endpoint: str,
         **kwargs,
-    ) -> Any | None:
-        url: str = f"{base_url}{endpoint}"
-
+    ) -> Optional[Any]:
+        url: str = self.service_options.build_url(
+            endpoint=endpoint,
+        )
         response: Response = await self.__session_request(
             method=method,
             url=url,
@@ -62,7 +78,7 @@ class BaseHTTPAdapter(HTTPExecutor):
         self,
         *args,
         **kwargs,
-    ) -> Any | None:
+    ) -> Optional[Any]:
         return await self.__request(
             method=RequestMethod.POST,
             *args,
@@ -73,7 +89,7 @@ class BaseHTTPAdapter(HTTPExecutor):
         self,
         *args,
         **kwargs,
-    ) -> Any | None:
+    ) -> Optional[Any]:
         return await self.__request(
             method=RequestMethod.GET,
             *args,

@@ -4,11 +4,11 @@
 
 from ...repository import RedisRepository
 
-from ....mysql.models import AccountCredentials
+from ....mysql.models import Accounts
 
 
-class AccountCredentialsCacheRepository(RedisRepository[AccountCredentials]):
-    _table: type[AccountCredentials] = AccountCredentials
+class AccountCredentialsCacheRepository(RedisRepository[Accounts]):
+    _table: type[Accounts] = Accounts
 
     def __init__(
         self,

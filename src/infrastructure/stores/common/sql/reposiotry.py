@@ -2,7 +2,10 @@
 
 # packages
 
-from typing import Generic
+from typing import (
+    Generic,
+    Optional,
+)
 
 from sqlalchemy import (
     # functions,
@@ -45,10 +48,10 @@ class BaseSQLRepository(
 
     async def fetch(
         self,
-        query: Select | None = None,
+        query: Optional[Select] = None,
         *,
         many: bool = True,
-    ) -> list[TTable] | TTable | None:
+    ) -> list[TTable] | Optional[TTable]:
         stmt: Select = query if query is not None else select(self._table)
         return await self._fetch(
             stmt,
@@ -57,14 +60,14 @@ class BaseSQLRepository(
 
     async def insert(
         self,
-        data: BaseModelType,
+        # data: BaseModelType,
+        data: dict[str, str],
     ) -> TTable:
         stmt: Insert = (
-            insert(self._table)
-            .values(**data.dump)
-            .returning(
-                self._table,
-            )
+            insert(self._table).values(**data)
+            # .returning(
+            #     self._table,
+            # )
         )
         return await self._commit(
             stmt,
@@ -75,7 +78,7 @@ class BaseSQLRepository(
         *,
         id: int,
         data: BaseModelType,
-    ) -> TTable | None:
+    ) -> Optional[TTable]:
         stmt: Update = (
             update(self._table)
             .filter_by(id=id)
@@ -90,7 +93,7 @@ class BaseSQLRepository(
         self,
         *,
         id: int,
-    ) -> TTable | None:
+    ) -> Optional[TTable]:
         stmt: Delete = (
             delete(self._table)
             .filter_by(id=id)

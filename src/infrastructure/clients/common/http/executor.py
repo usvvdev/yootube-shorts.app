@@ -13,22 +13,20 @@ from httpx import (
 
 # application dependencies
 
-from src.domain.types._types.options import ServiceOptions
-
 
 class HTTPExecutor:
-    def __init__(
-        self,
-        *,
-        options: ServiceOptions,
-    ) -> None:
-        self._options = options
+    # def __init__(
+    #     self,
+    #     *,
+    #     timeout: int = 60,
+    # ) -> None:
+    #     self._timeout = timeout
 
     @asynccontextmanager
     async def _open_client(self) -> AsyncGenerator[AsyncClient, None]:
         try:
             async with AsyncClient(
-                **self._options.dump,
+                timeout=60,
             ) as client:
                 yield client
         except HTTPError as err:

@@ -1,19 +1,27 @@
 # coding utf-8
 
+# packages
+
 # application depencies
 
-from ....common.http import BaseHTTPAdapter
+from .dtos import AuthorizationDTO
+
+from .adapter import PixverseHTTPAdapter
+
+from .responeses import AuthorizationResponse
+
+from ...common import HTTPClientMixin
 
 
-class PixverseClient(BaseHTTPAdapter):
-    def __init__(
+class PixverseClient(
+    PixverseHTTPAdapter,
+    HTTPClientMixin,
+):
+    async def account_authorization(
         self,
-        timeount: int = 60,
-        *args,
-        **kwargs,
-    ) -> None:
-        super().__init__(
-            timeount=timeount,
-            *args,
-            **kwargs,
+    ):
+        return await self.authorization(
+            dto_model=AuthorizationDTO,
+            response_model=TopMediaAuthResponse,
+            token_extractor=lambda r: r.data.token,
         )

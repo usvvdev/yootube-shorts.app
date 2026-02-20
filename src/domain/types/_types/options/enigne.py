@@ -8,18 +8,18 @@ from typing import (
 )
 
 from pydantic import (
-    RootModel,
     ConfigDict,
     SecretStr,
     Field,
     computed_field,
 )
 
-from urllib.parse import quote_plus
-
 # application dependencies
 
-from ..common import BaseConfigType
+from ..common import (
+    BaseConfigType,
+    BaseRootModelType,
+)
 
 from ...enums.common import EngineType
 
@@ -70,8 +70,8 @@ class DSNOptions(BaseConfigType):
         if not all([getattr(self, value) for value in URL_REQUIRED_FIELDS]):
             return ""
 
-        user: str = quote_plus(self.username) if self.username else ""
-        pwd: str = quote_plus(self.password.get_secret_value()) if self.password else ""
+        user: str = self.username if self.username else ""
+        pwd: str = self.password.get_secret_value() if self.password else ""
         credentials: str = f"{user}:{pwd}@" if pwd else f"{user}@" if user else ""
 
         return f"{self.driver}://{credentials}{self.host}:{self.port}/{self.database}"
@@ -112,7 +112,7 @@ class ConnectionOptions(DSNOptions):
         return Options(**engine_options)
 
 
-class EngineOptions(RootModel):
+class EngineOptions(BaseRootModelType):
     root: dict[EngineType, ConnectionOptions] = Field(
         ...,
         description="Dictionary of connection configurations by engine type",
@@ -132,9 +132,3 @@ class EngineOptions(RootModel):
             engine=engine,
             engine_options=engine_options.model_dump(),
         )
-
-    model_config = ConfigDict(
-        use_enum_values=True,
-        validate_by_alias=True,
-        mode="json",
-    )

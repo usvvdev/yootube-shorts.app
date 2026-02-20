@@ -1,9 +1,6 @@
 # coding utf-8
 
-from .account import (
-    Accounts,
-    AccountCredentials,
-)
+from .account import Accounts
 
 from .service import (
     Services,
@@ -19,7 +16,6 @@ from .user import (
 
 __all__: list[str] = [
     "Accounts",
-    "AccountCredentials",
     "Services",
     "ServiceRoutes",
     "ServiceRouteLinks",

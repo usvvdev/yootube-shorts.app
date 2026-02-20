@@ -50,12 +50,7 @@ class AccountCredentials(
         nullable=False,
     )
 
-    value: Mapped[str] = mapped_column(
-        Text,
-        nullable=False,
-    )
-
-    object_key: Mapped[str] = mapped_column(
+    key: Mapped[str] = mapped_column(
         String(512),
         nullable=True,
     )

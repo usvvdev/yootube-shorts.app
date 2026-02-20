@@ -2,9 +2,4 @@
 
 from .account import AccountSQLRepository
 
-from .credentials import AccountCredentialsSQLRepository
-
-__all__: list[str] = [
-    "AccountSQLRepository",
-    "AccountCredentialsSQLRepository",
-]
+__all__: list[str] = ["AccountSQLRepository"]

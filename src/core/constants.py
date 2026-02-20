@@ -19,5 +19,5 @@ SNAKE_CASE_REPLACEMENT = r"_\1"
 # Variables for config
 
 URL_REQUIRED_FIELDS: frozenset[str] = frozenset(
-    {"driver", "host", "port", "database"},
+    {"driver", "host", "port"},
 )

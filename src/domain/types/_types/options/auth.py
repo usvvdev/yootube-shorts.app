@@ -14,8 +14,3 @@ class AuthOptions(BaseModelType):
         default=None,
         description="Algorithm for both encoding and decoding JWT token.",
     )
-
-    secret_key: str | None = Field(
-        default=None,
-        description="Secret key used for signing JWT tokens.",
-    )

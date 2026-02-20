@@ -11,7 +11,10 @@ from .openapi import OpenAPIOptions
 
 from .telegram import TelegramOptions
 
-from .service import ServiceOptions
+from .service import (
+    ServiceOptions,
+    ServiceURLOptions,
+)
 
 __all__: list[str] = [
     "TelegramOptions",
@@ -20,4 +23,5 @@ __all__: list[str] = [
     "ConnectionOptions",
     "OpenAPIOptions",
     "ServiceOptions",
+    "ServiceURLOptions",
 ]

@@ -1,19 +1,31 @@
 # coding utf-8
 
+# packages
+
 # application depencies
 
-from ....common.http import BaseHTTPAdapter
+from .dtos import AuthorizationDTO
+
+from ...common import HTTPClientMixin
+
+from .adapter import TopMediaHTTPAdapter
+
+from .responeses import AuthorizationResponse
 
 
-class TopMediaClient(BaseHTTPAdapter):
-    def __init__(
+class TopMediaClient(
+    HTTPClientMixin,
+    TopMediaHTTPAdapter,
+):
+    async def account_authorization(
         self,
-        timeount: int = 60,
         *args,
         **kwargs,
-    ) -> None:
-        super().__init__(
-            timeount=timeount,
+    ) -> str:
+        return await self.authorization(
+            dto_model=AuthorizationDTO,
+            response_model=AuthorizationResponse,
+            token_extractor=lambda r: r.data.token,
             *args,
             **kwargs,
         )
