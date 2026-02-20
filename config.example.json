@@ -1,0 +1,101 @@
+{
+    "common": {
+        "auth_options": {
+            "algorithm": "HS256"
+        },
+        "engine_options": {
+            "mysql": {
+                "driver": "mysql+aiomysql"
+            },
+            "redis": {
+                "driver": "redis"
+            },
+            "rabbitmq": {
+                "driver": "amqp"
+            }
+        },
+        "service_options": {
+            "pixverse": {
+                "hosts": {
+                    "base": "https://app-api.pixverse.ai"
+                },
+                "endpoints": {
+                    "authorization": {
+                        "host": "base",
+                        "path": "/creative_platform/login"
+                    },
+                    "t2v": {
+                        "host": "base",
+                        "path": "/creative_platform/video/t2v"
+                    }
+                }
+            },
+            "topmedia": {
+                "hosts": {
+                    "base": null,
+                    "authorization": "https://account-api.topmediai.com",
+                    "voice": "https://tts-api.imyfone.com"
+                },
+                "endpoints": {
+                    "authorization": {
+                        "host": "authorization",
+                        "path": "/account/login"
+                    },
+                    "voice": {
+                        "host": "voice",
+                        "path": "/v5/voice/tts"
+                    },
+                    "download": {
+                        "host": "voice",
+                        "path": "/v2/user/audition/download/"
+                    }
+                }
+            }
+        }
+    },
+    "development": {
+        "telegram_options": {
+            "chat_id": 123456
+        },
+        "engine_options": {
+            "mysql": {
+                "pool_size": 5,
+                "max_overflow": 2,
+                "echo": true
+            },
+            "rabbitmq": {
+                "heartbeat": 60
+            }
+        }
+    },
+    "test": {
+        "telegram_options": {
+            "chat_id": 123456
+        },
+        "engine_options": {
+            "mysql": {
+                "pool_size": 5,
+                "max_overflow": 2,
+                "echo": true
+            },
+            "rabbitmq": {
+                "heartbeat": 60
+            }
+        }
+    },
+    "production": {
+        "telegram_options": {
+            "chat_id": 123456
+        },
+        "engine_options": {
+            "mysql": {
+                "pool_size": 20,
+                "max_overflow": 10,
+                "echo": false
+            },
+            "rabbitmq": {
+                "heartbeat": 30
+            }
+        }
+    }
+}
