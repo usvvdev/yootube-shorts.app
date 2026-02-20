@@ -9,10 +9,19 @@ from pydantic import Field
 from src.domain.types._types.common import BaseModelType
 
 
-class AuthorizationData(BaseModelType):
+class ResultData(BaseModelType):
     token: str = Field(
         ...,
         description="",
+        alias="Token",
+    )
+
+
+class AuthorizationData(BaseModelType):
+    result: ResultData = Field(
+        ...,
+        description="",
+        alias="Result",
     )
 
 

@@ -10,7 +10,11 @@ from ...common import HTTPClientMixin
 
 from .adapter import TopMediaHTTPAdapter
 
-from .responeses import AuthorizationResponse
+from .responses import AuthorizationResponse
+
+from src.domain.types.enums.common import ServiceEndpoint
+
+from src.infrastructure.stores.mysql.models.account import Accounts
 
 
 class TopMediaClient(
@@ -29,3 +33,14 @@ class TopMediaClient(
             *args,
             **kwargs,
         )
+
+    async def text_to_voice(
+        self,
+        user_id: int,
+    ):
+        account: type[Accounts] | None = await self.fetch_service_account(
+            user_id=user_id,
+        )
+
+        if account is None:
+            pass

@@ -46,3 +46,16 @@ class ServiceSQLRepository(MySQLRepository[Services]):
             many=False,
         )
         return service.routes if service else None
+
+    async def fetch_id(
+        self,
+        service_title: str,
+    ) -> int | None:
+        query: Select[tuple[type[Services]]] = select(self._table).where(
+            self._table.title == service_title,
+        )
+        service: type[Services] | None = await self.fetch(
+            query,
+            many=False,
+        )
+        return service.id if service else None

@@ -9,3 +9,5 @@ class ServiceEndpoint(StrEnum):
     AUTHORIZATION = "authorization"
 
     VOICE = "voice"
+
+    T2V = "t2v"
