@@ -19,9 +19,13 @@ class PixverseClient(
 ):
     async def account_authorization(
         self,
-    ):
+        *args,
+        **kwargs,
+    ) -> str:
         return await self.authorization(
             dto_model=AuthorizationDTO,
-            response_model=TopMediaAuthResponse,
+            response_model=AuthorizationResponse,
             token_extractor=lambda r: r.data.token,
+            *args,
+            **kwargs,
         )
